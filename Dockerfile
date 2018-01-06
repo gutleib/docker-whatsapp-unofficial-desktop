@@ -15,16 +15,18 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libnss3 \
     libasound2 \
+    ca-certificates \
+    libnotify4 \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-RUN wget wget https://github.com$(curl https://github.com/Enrico204/Whatsapp-Desktop/releases|grep  whatsapp-desktop |grep deb|grep amd64|sed -n 1p|cut -d '"' -f2) -O /tmp/whatsapp.deb && \
+RUN wget https://github.com$(curl https://github.com/Enrico204/Whatsapp-Desktop/releases|grep  whatsapp-desktop |grep deb|grep amd64|sed -n 1p|cut -d '"' -f2) -O /tmp/whatsapp.deb && \
     cd /tmp/ && \
-    dpkg -i whatsapp.deb \
-    apt-get isntall -f -y --no-install-recommends\
-    rm -rf /tmp/whatsapp.deb && \
+    dpkg -i /tmp/whatsapp.deb || true && \
+    apt-get -f install -y --no-install-recommends && \
+    rm /tmp/whatsapp.deb && \
     rm /etc/fonts/conf.d/10-scale-bitmap-fonts.conf && \
     fc-cache -fv
 
